@@ -29,6 +29,7 @@ classifiers = [
 [project.optional-dependencies]
 gpt4all = ["gpt4all>=2.0.0,<3.0.0"]
 annoy = ["annoy>=1.17.2,<2.0.0"]
+ollama = ["ollama==0.2.1"]
 
 [tool.ruff]
 select = [
