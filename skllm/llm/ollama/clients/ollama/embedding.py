@@ -35,7 +35,7 @@ def get_embedding(
         client = set_credentials(model)
     text = [str(t).replace("\n", " ") for t in text]
     embeddings = []
-    
+    emb = client.embeddings(model=model, prompt=text)
     emb = client.create_embeddings(input=text)
     for i in range(len(emb)):
         e = emb[i]["embedding"]

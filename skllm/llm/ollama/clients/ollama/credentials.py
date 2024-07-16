@@ -1,9 +1,11 @@
 import ollama
+from ollama import Client
 from typing import List
 
 class OllamaEmbedding:
     def __init__(self,
-                 model: str = "llama3"
+                 model: str = "llama3",
+                 host: str = "http://localhost:11434",
                  ) -> None:
         self.model = model
     
@@ -13,8 +15,8 @@ class OllamaEmbedding:
         
     
     
-    
-def set_credentials(model: str):
+ 
+def set_credentials(model: str = "llama3", host: str = "http://localhost:11434"):
     """Set the OpenAI key and organization.
 
     Parameters
@@ -24,5 +26,6 @@ def set_credentials(model: str):
     model : str
         The model to use.
     """
-    client = OllamaEmbedding(model=model)
+    client = Client(host=host)
+    # client = OllamaEmbedding(model=model)
     return client
