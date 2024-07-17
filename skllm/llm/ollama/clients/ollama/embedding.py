@@ -32,16 +32,14 @@ def get_embedding(
         The GPT embedding for the string.
     """
     if api in ("custom_url"):
-        client = set_credentials(model)
-    text = [str(t).replace("\n", " ") for t in text]
+        client = set_credentials() # should allow for host / url!
+    # text = [str(t).replace("\n", " ") for t in text]
     embeddings = []
-    emb = client.embeddings(model=model, prompt=text)
-    emb = client.create_embeddings(input=text)
-    for i in range(len(emb)):
-        e = emb[i]["embedding"]
-        if not isinstance(e, list):
-            raise ValueError(
-                f"Encountered unknown embedding format. Expected list, got {type(emb)}"
-            )
-        embeddings.append(e)
+    emb = client.embeddings(model=model, prompt=text[0]) # change to dont assume multiple texts
+    e = emb["embedding"]
+    if not isinstance(e, list):
+        raise ValueError(
+            f"Encountered unknown embedding format. Expected list, got {type(emb)}"
+        )
+    embeddings.append(e)
     return embeddings

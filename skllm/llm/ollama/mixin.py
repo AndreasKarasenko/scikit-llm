@@ -1,3 +1,4 @@
+from concurrent.futures import ThreadPoolExecutor
 from typing import List
 from skllm.llm.ollama.embedding import get_embedding
 from skllm.llm.base import (
@@ -5,6 +6,7 @@ from skllm.llm.base import (
 )
 import numpy as np
 from tqdm import tqdm
+from itertools import repeat
 
 
 
@@ -26,14 +28,20 @@ class OllamaEmbeddingMixin(BaseEmbeddingMixin):
         embedding : List[List[float]]
         """
         embeddings = []
-        print("Batch size:", self.batch_size)
-        for i in tqdm(range(0, len(text), self.batch_size)):
-            batch = text[i : i + self.batch_size].tolist()
-            embeddings.extend(
-                get_embedding(
-                    batch,
-                    self.model,
-                )
+        print("Batch size:", self.batch_size) # does not work yet, needs refactor of probably WAY more things
+        with ThreadPoolExecutor(max_workers=self.num_workers) as executor:
+            embs = list(
+                tqdm(executor.map(lambda x, y: get_embedding(x,y), text, repeat(self.model, len(text))), total=len(text))
             )
+        for i in embs:
+            embeddings.extend(i)
+        # for i in tqdm(range(0, len(text), self.batch_size)):
+            # batch = text[i : i + self.batch_size].tolist()
+            # embeddings.extend( # technically a single instance, can be multiprocessed to allow for batches
+            #     get_embedding(
+            #         batch,
+            #         self.model,
+            #     )
+            # )
 
         return embeddings
