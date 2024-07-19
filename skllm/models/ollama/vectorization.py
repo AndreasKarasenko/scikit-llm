@@ -3,7 +3,7 @@ from skllm.models._base.vectorizer import BaseVectorizer as _BaseVectorizer
 from skllm.llm.ollama.mixin import OllamaEmbeddingMixin as _OllamaEmbeddingMixin
 from typing import Optional
 
-
+# TODO refactor to use client instead
 class OllamaVectorizer(_BaseVectorizer, _OllamaEmbeddingMixin):
     def __init__(
         self,
